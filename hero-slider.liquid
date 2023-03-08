@@ -1,0 +1,314 @@
+
+<section data-section-id="{{ section.id }}" data-section-type="hero-slider-section" class="hero-slider hero-slider--{{ section.id }}">
+    <div class="hero-slider__container swiper">
+
+    <div class="hero-slider__slider swiper-wrapper">
+      {% if section.blocks != blank %}
+        {% for block in section.blocks %}
+              <div class="hero-slider__slide swiper-slide block-{{block.id}}">
+                <div class="hero-slider__inner">
+                  <div class="hero-slider__picture">
+                    {% assign image_desk = block.settings.image_desktop %}
+                     {% assign image_mob = block.settings.image_mobile %}
+                    <img class="hero-slider__image  {% if image_mob != blank %}hero-slider__image--desktop{% endif %}" alt="{{ image_desk.alt | default: 'hero image' }}" src="{{ image_desk | img_url: 'master'}}"  
+                       style="-o-object-position: {{ image_desk.presentation.focal_point }};
+                        object-position: {{ image_desk.presentation.focal_point }};"
+                      loading="lazy">
+                    {% if image_mob != blank %}
+                      <img class="hero-slider__image hero-slider__image--mobile" alt="{{ image_mob.alt | default: 'hero image' }}" src="{{ image_mob | img_url: '700x' }}" loading="lazy" height="400">
+                    {% endif %}
+                  </div>
+
+                   
+                        {% assign prod_first = block.settings.product_1 %}
+                       <span class="hero-slider__tooltip" data-tippy-content="<a style='color:white;' href='{{prod_first.url}}'><img style='max-width:50px;' src=' {{ prod_first.featured_image | img_url: "medium" }}'/><p>{{ prod_first.title }}</p><p>{{ prod_first.price | money_with_currency }}</p></a>" style="left: {{ image_desk.presentation.focal_point | split: " " | first }}; top:  {{ image_desk.presentation.focal_point | split: " " | last }};"></span>
+                    
+                        {% assign prod_second = block.settings.product_2 %}
+                      {% if prod_second != blank %}
+                        {% assign hor_point = image_desk.presentation.focal_point | split: " " | first %}
+                        {% assign hor_point_first = hor_point | remove: '%' %}
+                        {% if  block.settings.pos_second_hor == "right" %}
+                          {% assign hor_point =  100 | minus: hor_point_first %}
+                          {% assign hor_point = hor_point | divided_by: 100 %}
+                          {% assign hor_point = hor_point | times: block.settings.hor_proc %}
+                          {% assign hor_point = hor_point | plus: hor_point_first %}
+                        {% else %}
+                          {% assign hor_point = hor_point_first | divided_by: 100 %}
+                          {% assign hor_point = hor_point | times: block.settings.hor_proc %}
+                        {% endif %}
+
+                        {% assign vert_point = image_desk.presentation.focal_point | split: " " | last %}
+                        {% assign vert_point_first = vert_point | remove: '%' %}
+                        {% if  block.settings.pos_second_vert == "bottom" %}
+                          {% assign vert_point =  100 | minus: vert_point_first %}
+                          {% assign vert_point = vert_point | divided_by: 100 %}
+                          {% assign vert_point = vert_point | times: block.settings.vert_proc %}
+                          {% assign vert_point = vert_point | plus: vert_point_first %}
+                        {% else %}
+                          {% assign vert_point = vert_point_first | divided_by: 100 %}
+                          {% assign vert_point = vert_point | times: block.settings.vert_proc %}
+                        {% endif %}
+                       <span class="hero-slider__tooltip" data-tippy-content="<a style='color:white;' href='{{prod_second.url}}'><img style='max-width:50px;' src=' {{ prod_second.featured_image | img_url: "medium" }}'/><p>{{ prod_second.title }}</p><p>{{ prod_second.price | money_with_currency }}</p></a>" style="left: {{hor_point}}%; top:  {{ vert_point }}%;"></span>
+                      {% endif %}
+                </div>
+              </div>
+        {% endfor %}
+      {% endif %}
+    </div>
+
+    {% if section.blocks.size > 1 %}
+      <div class="hero-slider__navigation-inner">
+        <div class="hero-slider__swiper-button hero-slider__swiper-button--prev">
+          <svg fill="none" height="30" viewbox="0 0 18 30" width="18" xmlns="http://www.w3.org/2000/svg">
+            <path d="M15.6959 29.9697C16.1855 29.8781 16.6143 29.588 16.8712 29.173C17.1413 28.7375 17.4527 27.8684 16.5009 26.9372C12.6752 23.1932 8.55186 19.1585 4.29941 15.0027C8.32963 11.0678 12.3572 7.13235 16.3855 3.19687C16.4071 3.17573 16.4287 3.1546 16.451 3.13346C16.5356 3.05277 16.6307 2.96119 16.7211 2.85359C17.3118 2.14975 17.2744 1.1987 16.6307 0.540332C16.2904 0.191934 15.8702 0.00492639 15.4159 -0.000197127C14.9053 -0.00596109 14.4025 0.218832 13.962 0.648566C9.52991 4.97792 5.09785 9.30792 0.666442 13.6386C0.225269 14.0696 0.00173124 14.5275 0.00173122 14.9982C0.0017312 15.4689 0.230512 15.939 0.68152 16.3796C5.08998 20.6872 9.4991 24.9941 13.9082 29.3011C14.0406 29.4305 14.1626 29.5464 14.3107 29.6559C14.704 29.9467 15.2088 30.0606 15.6959 29.9697Z" fill="white"/>
+          </svg>
+        </div>
+        <div class="hero-slider__pagination swiper-pagination"></div>
+        <div class="hero-slider__swiper-button hero-slider__swiper-button--next">
+          <svg fill="none" height="30" viewbox="0 0 18 30" width="18" xmlns="http://www.w3.org/2000/svg">
+            <path d="M1.44867 0.0302944C0.958986 0.121876 0.530267 0.411995 0.273298 0.826998C0.00321806 1.2625 -0.30816 2.13157 0.643674 3.06277C4.46937 6.80676 8.59267 10.8415 12.8451 14.9973C8.8149 18.9322 4.7873 22.8676 0.759049 26.8031C0.737417 26.8243 0.715784 26.8454 0.693496 26.8665C0.608932 26.9472 0.51388 27.0388 0.423416 27.1464C-0.16722 27.8502 -0.129854 28.8013 0.51388 29.4597C0.854102 29.8081 1.2743 29.9951 1.72858 30.0002C2.23924 30.006 2.74204 29.7812 3.18256 29.3514C7.61462 25.0221 12.0467 20.6921 16.4781 16.3614C16.9193 15.9304 17.1428 15.4725 17.1428 15.0018C17.1428 14.5311 16.914 14.061 16.463 13.6204C12.0545 9.31279 7.64543 5.00585 3.23631 0.698912C3.10389 0.569542 2.98196 0.453623 2.83381 0.344108C2.44049 0.0533484 1.93573 -0.060648 1.44867 0.0302944Z" fill="white"/>
+          </svg>
+        </div>
+      </div>
+    {% endif %}
+
+  </div>
+</section>
+
+{% assign section_id = section.id | remove: "-" | remove: "_" %}
+ <script src="https://unpkg.com/@popperjs/core@2"></script>
+ <script src="https://unpkg.com/tippy.js@6"></script>
+              <script>
+                tippy('.hero-slider__tooltip', {
+                  trigger: 'click',
+                  allowHTML: true,
+                  hideOnClick: 'toggle',
+                });
+              </script>
+<script>
+  
+  let initHeroSwiper{{section_id}} = () => {
+    const swiper = new Swiper('.hero-slider__container', {
+      slidesPerView: 1,
+      loop: false,
+      speed: 500,
+      pagination: {
+        el: '.hero-slider__pagination',
+      },
+      on: {
+        slideNextTransitionStart: function (swiper) {
+          tippy.hideAll();
+        },
+        slidePrevTransitionStart: function (swiper) {
+          tippy.hideAll();
+        }
+      },
+      navigation: {
+        nextEl: '.hero-slider__swiper-button--next',
+        prevEl: '.hero-slider__swiper-button--prev',
+      }
+    });
+	};
+
+	initHeroSwiper{{section_id}}();
+
+  document.addEventListener("shopify:section:load", initHeroSwiper{{section_id}});
+</script>
+<script>
+  addEventListener("click", (event) => {
+    const hasClass = event.target.classList.contains('hero-slider__tooltip');
+    const hasClass2 = event.target.classList.contains('tippy-content');
+    if (hasClass || hasClass2) {
+    } else {
+      tippy.hideAll();
+    }
+  });
+</script>
+<style>
+  [data-tippy-root] {
+    pointer-events:auto !important;
+  }
+  .hero-slider__image--mobile {
+    display:none;
+  }
+  .hero-slider__picture {
+    position: relative;
+    width: 100%;
+  }
+  .hero-slider__picture:before {
+      content: "";
+      display: block;
+      padding-bottom: 45%;
+  }
+  .hero-slider__image {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%,-50%);
+    width: 100%;
+    height: 100%;
+    -o-object-fit: cover;
+    object-fit: cover;
+    -o-object-position: center;
+    object-position: center;
+   }
+ /* .hero-slider__tooltip {
+    background: white;
+    width: 10px;
+    height: 10px;
+    display: block;
+    position: absolute;
+    border-radius: 50%;
+    cursor: pointer;
+  }*/
+
+.hero-slider__tooltip {
+  background: white;
+  border-radius: 50%;
+  box-shadow: 0 0 0 0 rgba(0, 0, 0, 1);
+  position: absolute;
+  cursor: pointer;
+  margin: 10px;
+  height: 20px;
+  width: 20px;
+  transform: scale(1);
+  animation: pulse-black 2s infinite;
+}
+
+@keyframes pulse-black {
+  0% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.7);
+  }
+  
+  70% {
+    transform: scale(1);
+    box-shadow: 0 0 0 10px rgba(255, 255, 255, 0);
+  }
+  
+  100% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(255, 255, 255, 0);
+  }
+}
+
+
+  
+   @media screen and (max-width: 990px) {
+     .hero-slider__image--mobile {
+        display:block;
+      }
+     .hero-slider__image--desktop {
+        display:none;
+     }
+   }
+</style>
+{% schema %}
+{
+		"name": "Hero Slider",
+    "settings": [
+      {
+        "type": "checkbox",
+        "id": "enable_autoplay",
+        "label": "Enable Autoplay",
+        "default": false
+      },
+      {
+        "type": "range",
+        "id": "speed",
+        "min": 500,
+        "max": 5000,
+        "step": 100,
+        "unit": "ms",
+        "label": "Speed autoplay",
+        "default": 3000
+      }
+    ],
+		"blocks": [
+			{
+				"type": "slide-img",
+				"name": "Slide [IMG]",
+				"settings": [
+					{
+						"type": "image_picker",
+						"id": "image_desktop",
+						"label": "Image Desktop"
+					},
+					{
+						"type": "image_picker",
+						"id": "image_mobile",
+						"label": "Image Mobile"
+					},
+					{
+						"type": "product",
+						"id": "product_1",
+						"label": "First product"
+					},
+					{
+						"type": "product",
+						"id": "product_2",
+						"label": "Second product"
+					},
+                   {
+                    "type": "select",
+                    "id": "pos_second_vert",
+                    "options": [
+                      {
+                        "value": "top",
+                        "label": "Top"
+                      },
+                      {
+                        "value": "bottom",
+                        "label": "Bottom"
+                      }
+                    ],
+                    "default": "top",
+                    "label": "Vertical Position"
+                  },
+                  {
+                    "type": "range",
+                    "id": "vert_proc",
+                    "min": 0,
+                    "max": 100,
+                    "step": 1,
+                    "unit": "%",
+                    "label": "The vertical position between the point and the edge of the picture",
+                    "default": 50
+                  },
+                   {
+                    "type": "select",
+                    "id": "pos_second_hor",
+                    "options": [
+                      {
+                        "value": "left",
+                        "label": "Left"
+                      },
+                      {
+                        "value": "right",
+                        "label": "Right"
+                      }
+                    ],
+                    "default": "right",
+                    "label": "Horizontal Position"
+                  },
+                  {
+                    "type": "range",
+                    "id": "hor_proc",
+                    "min": 0,
+                    "max": 100,
+                    "step": 1,
+                    "unit": "%",
+                    "label": "The horizontal position between the point and the edge of the picture",
+                    "default": 50
+                  }
+		]
+			}
+		],
+		"presets": [
+			{
+				"name": "Hero Slider",
+				"category": "Sections"
+			}
+		]
+	}
+{% endschema %}
